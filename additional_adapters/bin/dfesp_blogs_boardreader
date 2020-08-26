@@ -1,0 +1,8 @@
+#!/bin/sh
+
+if [ "x$DFESP_HOME" = "x" ] ; then 
+  echo "In order to run this script, environment variable DFESP_HOME must be set to specify the installation directory of the ESP product."
+  exit 1
+fi
+
+python $DFESP_HOME/lib/CrawlerBoardReaderBlogs.py "$@"
