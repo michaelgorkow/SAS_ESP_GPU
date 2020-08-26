@@ -115,7 +115,7 @@ While you should notice a significant performance improvement while training/sco
 ```
 watch -n 1 nvidia-smi
 ```
-nvidia-smi should show a cas-process.
+nvidia-smi should show a esp process.
 ![nvidia-smi monitoring](images/nvidia-smi.png "nvidia-smi monitoring")<br>
 Make sure you run this command on your host, not inside the container.
 
