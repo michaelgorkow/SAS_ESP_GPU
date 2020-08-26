@@ -13,7 +13,7 @@ Please note:
 This repository is privately owned by me. Don't expect any official support for the work provided here.
 
 ### Requirements
-* Valid SAS Event Stream Processing license file (tested with SAS Viya 3.5)
+* Valid SAS Event Stream Processing license file (tested with SAS Event Stream Processing 6.2)
 * System with NVIDIA GPU (tested with RTX2070, RTX3000 and V100)
 * Linux OS (tested with Ubuntu 18.04 and Centos 7)
 * NVIDIA Driver (tested with version 430/450)
@@ -25,7 +25,7 @@ This repository is privately owned by me. Don't expect any official support for 
 git clone https://github.com/Mentos05/SAS_ESP_GPU.git
 ```
 2. Copy your license file into the repository folder (usually named: SAS_Viya_deployment_data.zip)
-2. Go into the repository folder and run docker build command<br>
+3. Go into the repository folder and run docker build command<br>
 ```
 cd SAS_ESP_GPU
 docker build .  -t esp:gpu
@@ -57,10 +57,6 @@ You should see something like this:<br>
 ### Access Jupyter Lab
 Open one of the following URLs in your browser:
 * JupyterLab: http://localhost:8080
-
-Use the following credentials:<br>
-Username = sas<br>
-Password = saspw
 
 ### Whats next?
 Connect to your container, e.g. via [SAS ESPPy](https://github.com/sassoftware/python-esppy).<br>
@@ -120,7 +116,7 @@ While you should notice a significant performance improvement while training/sco
 watch -n 1 nvidia-smi
 ```
 nvidia-smi should show a cas-process.
-![nvidia-smi monitoring](img/nvidia-smi.png "nvidia-smi monitoring")<br>
+![nvidia-smi monitoring](images/nvidia-smi.png "nvidia-smi monitoring")<br>
 Make sure you run this command on your host, not inside the container.
 
 ### Private Repository

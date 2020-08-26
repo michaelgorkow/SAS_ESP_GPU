@@ -2,7 +2,8 @@ FROM nvidia/cuda:10.1-cudnn7-devel-centos7
 MAINTAINER Michael Gorkow <michael.gorkow@sas.com>
 
 #Install ESP dependencies
-RUN yum -y update && yum -y install wget unzip numactl java-1.8.0-openjdk NetworkManager epel-release
+RUN yum -y update && \
+    yum -y install wget unzip numactl java-1.8.0-openjdk NetworkManager epel-release
 
 #Create and set working directory + add deployment data
 RUN mkdir -p /opt/sas/installfiles
@@ -28,8 +29,8 @@ RUN \cp /opt/sas/installfiles/licenses/SASViyaV0300_09QCC6_Linux_x86-64.txt /opt
 ENV DFESP_HOME="/opt/sas/viya/home/SASEventStreamProcessingEngine/6.2"
 
 #Add ESP plugins
-RUN wget https://gitlab.sas.com/germgk/esp-gpu-docker/-/archive/master/esp-gpu-docker-master.zip?path=esp_plugins -P /tmp
-RUN unzip /tmp/esp-gpu-docker-master.zip\?path\=esp_plugins -d /tmp && mv /tmp/esp-gpu-docker-master-esp_plugins/esp_plugins/*.so $DFESP_HOME/lib
+#RUN wget https://gitlab.sas.com/germgk/esp-gpu-docker/-/archive/master/esp-gpu-docker-master.zip?path=esp_plugins -P /tmp
+#RUN unzip /tmp/esp-gpu-docker-master.zip\?path\=esp_plugins -d /tmp && mv /tmp/esp-gpu-docker-master-esp_plugins/esp_plugins/*.so $DFESP_HOME/lib
 
 #Install Anaconda
 RUN yum install -y bzip2 ca-certificates curl bash sudo git \
