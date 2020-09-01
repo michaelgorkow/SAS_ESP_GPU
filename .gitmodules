@@ -1,0 +1,3 @@
+[submodule "OpenCV-x64-gpu"]
+	path = OpenCV-x64-gpu
+	url = https://github.com/Mentos05/OpenCV-x64-gpu.git
