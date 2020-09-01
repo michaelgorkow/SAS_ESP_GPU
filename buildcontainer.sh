@@ -134,24 +134,28 @@ fi
 
 # Check OpenCV files
 echo "NOTE: Verifying OpenCV files"
-if ! ls opencv-aarch64-deb/opencv-aarch64-deb/* 1> /dev/null 2>&1; then
+if ! ls OpenCV-x64-gpu/opencv-centos7-x64-deb/download_prebuilt_debs.sh 1> /dev/null 2>&1; then
    echo "NOTE: Could not find OpenCV files. Getting submodules."
    git submodule init
-   git submodule update
+   git submodule update --recursive --remote
+fi
+
+if ! ls OpenCV-x64-gpu/opencv-centos7-x64-deb/OpenCV-4.3.0-x86_64-centos7/* 1> /dev/null 2>&1; then
+   echo "NOTE: Could not find OpenCV files."
+   if ls OpenCV-x64-gpu/opencv-centos7-x64-deb/OpenCV-4.3.0-x86_64-centos7.zip 1> /dev/null 2>&1; then
+      echo "NOTE: Found OpenCV archive files. Extracting..."
+      unzip OpenCV-x64-gpu/opencv-centos7-x64-deb/OpenCV-4.3.0-x86_64-centos7.zip -d OpenCV-x64-gpu/opencv-centos7-x64-deb/OpenCV-4.3.0-x86_64-centos7
+      echo "NOTE: OpenCV files are available now."
+   else
+      echo "NOTE: Begin downloading OpenCV files."
+      git submodule update --recursive --remote
+      bash OpenCV-x64-gpu/opencv-centos7-x64-deb/download_prebuilt_debs.sh
+      unzip OpenCV-x64-gpu/opencv-centos7-x64-deb/OpenCV-4.3.0-x86_64-centos7.zip -d OpenCV-x64-gpu/opencv-centos7-x64-deb/OpenCV-4.3.0-x86_64-centos7
+      echo "NOTE: OpenCV files are available now."
+   fi
 else
    echo "NOTE: OpenCV files found."
 fi
-
-# Install qemu for aarch emulation on X64
-echo "NOTE: Verifying qemu installation"
-if ! ls $qemu_file 1> /dev/null 2>&1; then
-   echo "NOTE: Installing qemu for aarch emulation on X64"
-   sudo apt-get update -y
-   sudo apt-get install qemu binfmt-support qemu-user-static -y
-else
-   echo "NOTE: Qemu installation found. Copying qemu-aarch64-static to repository folder."
-   cp $qemu_file .
-fi 
 
 # Building Docker container
 if [ $container_build="YES" ]; then
