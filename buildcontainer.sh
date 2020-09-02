@@ -134,25 +134,10 @@ fi
 
 # Check OpenCV files
 echo "NOTE: Verifying OpenCV files"
-if ! ls OpenCV-x64-gpu/opencv-centos7-x64-deb/download_prebuilt_debs.sh 1> /dev/null 2>&1; then
+if ! ls  OpenCV-x64-gpu/opencv-centos7-x64-rpm/* 1> /dev/null 2>&1; then
    echo "NOTE: Could not find OpenCV files. Getting submodules."
    git submodule init
    git submodule update --recursive --remote
-fi
-
-if ! ls OpenCV-x64-gpu/opencv-centos7-x64-deb/OpenCV-4.3.0-x86_64-centos7/* 1> /dev/null 2>&1; then
-   echo "NOTE: Could not find OpenCV files."
-   if ls OpenCV-x64-gpu/opencv-centos7-x64-deb/OpenCV-4.3.0-x86_64-centos7.zip 1> /dev/null 2>&1; then
-      echo "NOTE: Found OpenCV archive files. Extracting..."
-      unzip OpenCV-x64-gpu/opencv-centos7-x64-deb/OpenCV-4.3.0-x86_64-centos7.zip -d OpenCV-x64-gpu/opencv-centos7-x64-deb/OpenCV-4.3.0-x86_64-centos7
-      echo "NOTE: OpenCV files are available now."
-   else
-      echo "NOTE: Begin downloading OpenCV files."
-      git submodule update --recursive --remote
-      bash OpenCV-x64-gpu/opencv-centos7-x64-deb/download_prebuilt_debs.sh
-      unzip OpenCV-x64-gpu/opencv-centos7-x64-deb/OpenCV-4.3.0-x86_64-centos7.zip -d OpenCV-x64-gpu/opencv-centos7-x64-deb/OpenCV-4.3.0-x86_64-centos7
-      echo "NOTE: OpenCV files are available now."
-   fi
 else
    echo "NOTE: OpenCV files found."
 fi
