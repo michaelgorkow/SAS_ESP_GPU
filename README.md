@@ -102,6 +102,7 @@ Some of the Python packages installed are:<br>
 | SAS DLPy | [SAS DLPy](https://github.com/sassoftware/python-dlpy) | 
 | SAS ESPPy | [SAS ESPPy](https://github.com/sassoftware/python-esppy) |
 | OpenCV | [OpenCV](https://github.com/opencv/opencv) |
+| TensorFlow | [TensorFlow](https://github.com/tensorflow/tensorflow) |
 
 For a full list, please look at the requirements.txt folder.
 When building your own container, you can adjust this file as you like to ex/include Python packages.
