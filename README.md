@@ -23,13 +23,39 @@ This repository is privately owned by me. Don't expect any official support for 
 1. Pull this repository<br>
 ```
 git clone https://github.com/Mentos05/SAS_ESP_GPU.git
+cd SAS_ESP_JETSON_GPU
 ```
 2. Copy your license file into the repository folder (usually named: SAS_Viya_deployment_data.zip)
-3. Go into the repository folder and run docker build command<br>
 ```
-cd SAS_ESP_GPU
-docker build .  -t esp:gpu
+cp /path/to/your/SAS_Viya_deployment_data.zip .
 ```
+3. (Optional) Add additional SAS Event Stream Processing adapters/plugins to the appropriate folders in esp_addons.
+4. Run buildContainer.sh. The script will download all required files and build the container.
+```
+bash buildcontainer.sh
+```
+
+### Customize your Container Setup (Optional)
+The buildContainer.sh script accepts user variables.<br>
+Append them to buildContainer.sh with --variable=value<br>
+Example:<br>
+```
+bash buildContainer.sh --sas_deployment_data=mydeploymentdata.zip
+```
+
+| Variable | Description | Default |
+| ------ | ------ | ------ |
+| sas_deployment_data | Name of your SAS deployment data file | SAS_Viya_deployment_data.zip |
+| sas_mirrormanager_url | URL for SAS Mirror Manager | https://support.sas.com/installation/viya/35/sas-mirror-manager/lax/mirrormgr-linux.tgz |
+| sas_mirrorextensions_url | URL for SAS Mirror Manager Extension | https://support.sas.com/installation/viya/35/sas-edge-extension/sas-edge-extension.tgz |
+| sas_software_repository | Name of the SAS software repository | sas-espedge-125-aarch64_ubuntu_linux_16-apt |
+| sas_package_location | Name of the SAS software repository | sas-espedge-125-aarch64_ubuntu_linux_16-apt |
+| python_req | Requirements file for Python | requirements.txt |
+| opencv_package_location | Location of OpenCV package | OpenCV-x64-gpu/opencv-centos7-x64-rpm |
+| container_name | Docker container name | esp_gpu |
+| container_tag | Docker container tag | 6_2n |
+| container_build | Build container | YES |
+| container_push | Push container to repository | NO |
 
 ### Run Container
 Simply use docker run and attach your gpus:
