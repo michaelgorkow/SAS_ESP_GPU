@@ -1,6 +1,7 @@
 # SAS Event Stream Processing Docker Container with GPU acceleration
 
-This repository provides build instructions to create your own SAS Event Stream Processing Docker Container with GPU acceleration.
+This repository provides build instructions to create your own SAS Event Stream Processing Docker Container with GPU acceleration.<br>
+Included is an installation of [OpenCV 4.4.0](https://github.com/Mentos05/OpenCV-x64-gpu) for Computer Vision tasks.
 
 ### Overview
 SAS Event Stream Processing already offers the possibility to be installed as a Docker container. So, why does this repository exist?
@@ -81,8 +82,8 @@ You should see something like this:<br>
 ![cv](images/running_container.png "cv")
 
 ### Access Jupyter Lab
-Open one of the following URLs in your browser:
-* JupyterLab: http://localhost:8080
+Open the following URL in your browser:<br>
+http://localhost:8080
 
 ### Whats next?
 Connect to your container, e.g. via [SAS ESPPy](https://github.com/sassoftware/python-esppy).<br>
@@ -101,7 +102,6 @@ Some of the Python packages installed are:<br>
 | SAS DLPy | [SAS DLPy](https://github.com/sassoftware/python-dlpy) | 
 | SAS ESPPy | [SAS ESPPy](https://github.com/sassoftware/python-esppy) |
 | OpenCV | [OpenCV](https://github.com/opencv/opencv) |
-| OpenPose | [OpenPose](https://github.com/CMU-Perceptual-Computing-Lab/openpose) |
 
 For a full list, please look at the python_sas.yml file in /jupyterlab_environments folder.
 When building your own container, you can add your own environment.yml files into /jupyterlab_environments folder to have customized Python environments.
