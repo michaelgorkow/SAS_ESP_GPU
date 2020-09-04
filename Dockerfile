@@ -3,17 +3,19 @@ MAINTAINER Michael Gorkow <michael.gorkow@sas.com>
 ENV DEBIAN_FRONTEND=noninteractive
 
 # Change to location of your files if necessary
-ARG OPENCV_PACKAGELOCATION=OpenCV-x64-gpu/opencv-centos7-x64-rpm
 ARG SASESP_PACKAGELOCATION=espedge_repos/sas-espedge-106-x64_redhat_linux_6-yum
 ARG SAS_DEPLOYMENTDATA=SAS_Viya_deployment_data.zip
+ARG SASESP_PLUGINS=esp_addons/esp_plugins
+ARG SASESP_ADAPTER=esp_addons/additional_adapters
+ARG OPENCV_PACKAGELOCATION=OpenCV-x64-gpu/opencv-centos7-x64-rpm
 ARG PYTHON_REQ=requirements.txt
 
 # Copy SAS Event Stream Processing, OpenCV and Python environment files
 RUN mkdir -p /opt/opencv/ && \
     mkdir -p /opt/sas_installfiles/
-COPY ${OPENCV_PACKAGELOCATION} /opt/opencv
 COPY ${SASESP_PACKAGELOCATION} /opt/sas_installfiles
 ADD ${SAS_DEPLOYMENTDATA} /opt/sas_installfiles
+COPY ${OPENCV_PACKAGELOCATION} /opt/opencv
 ADD ${PYTHON_REQ} /opt
 
 # Install required repositories and packages
@@ -34,7 +36,7 @@ RUN yum -y install epel-release \
 
 # Install Python packages
 RUN pip3 install -U pip && \
-    pip3 install -r /opt/requirements.txt
+    pip3 install -r /opt/${PYTHON_REQ}
 
 # Install and configure Jupyter Lab and Addons
 RUN curl -sL https://rpm.nodesource.com/setup_14.x | bash - && \
@@ -77,8 +79,14 @@ ENV SSLCALISTLOC=/data/tls/trustedcerts.pem
 ENV JUPYTERLAB_PORT=8080
 ENV JUPYTERLAB_NBDIR=/data/notebooks/
 
-# Postconfiguration (fix tensorflow cudart error)
+# Postconfiguration
+# Fix Tensorflow cudart error
 RUN ln -s /usr/local/cuda/lib64/libcudart.so.10.2 /usr/lib64/libcudart.so.10.1
+# Add additional SAS Event Stream Processing components
+COPY {$SASESP_PLUGINS}/. $DFESP_HOME/lib
+COPY {$SASESP_ADAPTER}/bin/. $DFESP_HOME/bin/
+COPY {$SASESP_ADAPTER}/lib/. $DFESP_HOME/lib/
+COPY {$SASESP_ADAPTER}/etc/. $DFESP_HOME/etc/
 
 # Remove installation files
 RUN rm -rf /opt/opencv /opt/sas_installfiles /opt/requirements.txt
