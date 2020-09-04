@@ -20,7 +20,7 @@ This repository is privately owned by me. Don't expect any official support for 
 * [NVIDIA Docker](https://github.com/NVIDIA/nvidia-docker)
 
 ### Container Setup
-1. Pull this repository<br>
+1. Clone this repository<br>
 ```
 git clone https://github.com/Mentos05/SAS_ESP_GPU.git
 cd SAS_ESP_JETSON_GPU
@@ -49,7 +49,7 @@ bash buildContainer.sh --sas_deployment_data=mydeploymentdata.zip
 | sas_mirrormanager_url | URL for SAS Mirror Manager | https://support.sas.com/installation/viya/35/sas-mirror-manager/lax/mirrormgr-linux.tgz |
 | sas_mirrorextensions_url | URL for SAS Mirror Manager Extension | https://support.sas.com/installation/viya/35/sas-edge-extension/sas-edge-extension.tgz |
 | sas_software_repository | Name of the SAS software repository | sas-espedge-125-aarch64_ubuntu_linux_16-apt |
-| sas_package_location | Name of the SAS software repository | sas-espedge-125-aarch64_ubuntu_linux_16-apt |
+| sas_package_location | Name of the SAS software repository | espedge_repos/sas-espedge-106-x64_redhat_linux_6-yum |
 | python_req | Requirements file for Python | requirements.txt |
 | opencv_package_location | Location of OpenCV package | OpenCV-x64-gpu/opencv-centos7-x64-rpm |
 | container_name | Docker container name | esp_gpu |
