@@ -103,8 +103,8 @@ Some of the Python packages installed are:<br>
 | SAS ESPPy | [SAS ESPPy](https://github.com/sassoftware/python-esppy) |
 | OpenCV | [OpenCV](https://github.com/opencv/opencv) |
 
-For a full list, please look at the python_sas.yml file in /jupyterlab_environments folder.
-When building your own container, you can add your own environment.yml files into /jupyterlab_environments folder to have customized Python environments.
+For a full list, please look at the requirements.txt folder.
+When building your own container, you can adjust this file as you like to ex/include Python packages.
 
 ### Share ressources with your container
 If you want to share ressources with your container, e.g. a webcam, you can do so by adapting your docker run command.<br>
