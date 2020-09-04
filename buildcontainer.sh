@@ -1,12 +1,15 @@
 # Default variables
-sas_deployment_data="SAS_Viya_deployment_data.zip"
-sas_mirrormanager_download_url="https://support.sas.com/installation/viya/35/sas-mirror-manager/lax/mirrormgr-linux.tgz"
-sas_mirrorextensions_download_url="https://support.sas.com/installation/viya/35/sas-edge-extension/sas-edge-extension.tgz"
-sas_software_repository="sas-espedge-106-x64_redhat_linux_6-yum"
-container_name="esp_gpu"
-container_tag="6_2"
-container_build="YES"
-container_push="NO"
+SAS_DEPLOYMENTDATA="SAS_Viya_deployment_data.zip"
+SAS_MIRRORMANAGER_URL="https://support.sas.com/installation/viya/35/sas-mirror-manager/lax/mirrormgr-linux.tgz"
+SAS_MIRROREXTENSIONS_URL="https://support.sas.com/installation/viya/35/sas-edge-extension/sas-edge-extension.tgz"
+SAS_SOFTWAREREPOSITORY="sas-espedge-106-x64_redhat_linux_6-yum"
+SAS_PACKAGELOCATION="espedge_repos/sas-espedge-106-x64_redhat_linux_6-yum"
+PYTHON_REQ="requirements.txt"
+OPENCV_PACKAGELOCATON="OpenCV-x64-gpu/opencv-centos7-x64-rpm"
+CONTAINER_NAME="esp_gpu"
+CONTAINER_TAG="6_2"
+CONTAINER_BUILD="YES"
+CONTAINER_PUSH="NO"
 OTHER_ARGUMENTS=()
 
 # User provided variables
@@ -14,35 +17,47 @@ for arg in "$@"
 do
     case $arg in
         -sdd*|--sas_deployment_data*)
-        sas_deployment_data="${arg#*=}"
+        SAS_DEPLOYMENTDATA="${arg#*=}"
         shift
         ;;
-        -smmdu*|--sas_mirrormanager_download_url*)
-        sas_mirrormanager_download_url="${arg#*=}"
+        -smmdu*|--sas_mirrormanager_url*)
+        SAS_MIRRORMANAGER_URL="${arg#*=}"
         shift
         ;;
-        -smedu*|--sas_mirrorextensions_download_url*)
-        sas_mirrorextensions_download_url="${arg#*=}"
+        -smedu*|--sas_mirrorextensions_url*)
+        SAS_MIRROREXTENSIONS_URL="${arg#*=}"
         shift
         ;;
         -ssr*|--sas_software_repository*)
-        sas_software_repository="${arg#*=}"
+        SAS_SOFTWAREREPOSITORY="${arg#*=}"
+        shift
+        ;;
+        -spl*|--sas_package_location*)
+        SAS_PACKAGELOCATION="${arg#*=}"
+        shift
+        ;;
+        -pr*|--python_req*)
+        PYTHON_REQ="${arg#*=}"
+        shift
+        ;;
+        -opl*|--opencv_package_location*)
+        OPENCV_PACKAGELOCATON="${arg#*=}"
         shift
         ;;
         -cn*|--container_name*)
-        container_name="${arg#*=}"
+        CONTAINER_NAME="${arg#*=}"
         shift
         ;;
         -ct*|--container_tag*)
-        container_tag="${arg#*=}"
+        CONTAINER_TAG="${arg#*=}"
         shift
         ;;
         -cb*|--container_build*)
-        container_build="${arg#*=}"
+        CONTAINER_BUILD="${arg#*=}"
         shift
         ;;
         -cp*|--container_push*)
-        container_push="${arg#*=}"
+        CONTAINER_PUSH="${arg#*=}"
         shift
         ;;
         *)
@@ -66,25 +81,34 @@ printf '#%.0s' {1..100}; printf '\n';
 printf '##### %-88s #####\n' "Variables"
 printf '##### %-88s #####\n'
 printf '##### %-88s #####\n' "SAS Deployment Data:"
-printf '##### %-88s #####\n' "$sas_deployment_data"
+printf '##### %-88s #####\n' "$SAS_DEPLOYMENTDATA"
 printf '##### %-88s #####\n'
 printf '##### %-88s #####\n' "SAS Mirror Manager URL:"
-printf '##### %-88s #####\n' "$sas_mirrormanager_download_url"
+printf '##### %-88s #####\n' "$SAS_MIRRORMANAGER_URL"
 printf '##### %-88s #####\n'
 printf '##### %-88s #####\n' "SAS Mirror Extensions URL:"
-printf '##### %-88s #####\n' "$sas_mirrorextensions_download_url"
+printf '##### %-88s #####\n' "$SAS_MIRROREXTENSIONS_URL"
+printf '##### %-88s #####\n'
+printf '##### %-88s #####\n' "SAS Package Location:"
+printf '##### %-88s #####\n' "$SAS_PACKAGELOCATION"
+printf '##### %-88s #####\n'
+printf '##### %-88s #####\n' "Python Requirements File:"
+printf '##### %-88s #####\n' "$PYTHON_REQ"
+printf '##### %-88s #####\n'
+printf '##### %-88s #####\n' "OpenCV Package Location:"
+printf '##### %-88s #####\n' "$OPENCV_PACKAGELOCATON"
 printf '##### %-88s #####\n'
 printf '##### %-88s #####\n' "Docker Container Name:"
-printf '##### %-88s #####\n' "$container_name"
+printf '##### %-88s #####\n' "$CONTAINER_NAME"
 printf '##### %-88s #####\n'
 printf '##### %-88s #####\n' "Docker Container Tag:"
-printf '##### %-88s #####\n' "$container_tag"
+printf '##### %-88s #####\n' "$CONTAINER_TAG"
 printf '##### %-88s #####\n'
 printf '##### %-88s #####\n' "Build Container:"
-printf '##### %-88s #####\n' "$container_build"
+printf '##### %-88s #####\n' "$CONTAINER_BUILD"
 printf '##### %-88s #####\n'
 printf '##### %-88s #####\n' "Push Container:"
-printf '##### %-88s #####\n' "$container_push"
+printf '##### %-88s #####\n' "$CONTAINER_PUSH"
 printf '##### %-88s #####\n'
 printf '#%.0s' {1..100}; printf '\n';
 printf '#%.0s' {1..100}; printf '\n'; printf '\n';
@@ -100,41 +124,43 @@ done
 
 # Check SAS deployment data
 echo "NOTE: Verifying SAS_Viya_deployment_data.zip"
-if ls $sas_deployment_data 1> /dev/null 2>&1; then
-    echo "NOTE: $sas_deployment_data found in $(pwd)"
+if ls $SAS_DEPLOYMENTDATA 1> /dev/null 2>&1; then
+    echo "NOTE: $SAS_DEPLOYMENTDATA found in $(pwd)"
 else
-    echo "$sas_deployment_data not found in $(pwd). Exiting."
+    echo "$SAS_DEPLOYMENTDATA not found in $(pwd). Exiting."
     exit 1
 fi
 
 # Check SAS Event Stream Processing on Edge repository
 echo "NOTE: Verifying SAS Event Stream Processing on Edge files"
-if ! ls espedge_repos/$sas_software_repository/analytics/sas-* 1> /dev/null 2>&1; then
+if ! ls $SAS_PACKAGELOCATION/analytics/sas-* 1> /dev/null 2>&1; then
    echo "NOTE: SAS Event Stream Processing on Egde repository does not exist. Begin download."
+   echo "NOTE: Changing Package Location from $SAS_PACKAGELOCATION to espedge_repos/$SAS_SOFTWAREREPOSITORY"
+   SAS_PACKAGELOCATION="espedge_repos/$SAS_SOFTWAREREPOSITORY"
    # Check SAS Mirror Manager
    if ls mirrormgr 1> /dev/null 2>&1; then
       echo "NOTE: SAS Mirror Manager exists."
    else
       echo "NOTE: Downloading SAS Mirror Manager."
-      wget $sas_mirrormanager_download_url -O mirrormgr-linux.tgz && tar zxfv mirrormgr-linux.tgz && rm mirrormgr-linux.tgz
+      wget $SAS_MIRRORMANAGER_URL -O mirrormgr-linux.tgz && tar zxfv mirrormgr-linux.tgz && rm mirrormgr-linux.tgz
    fi
    # Check SAS Mirror Manager Extensions
    if ls edge_mirror.sh 1> /dev/null 2>&1; then
       echo "NOTE: SAS Mirror Manager Extension exists."
    else
       echo "NOTE: Downloading SAS Mirror Extensions for SAS Event Stream Processing for Edge Computing."
-      wget $sas_mirrorextensions_download_url -O sas-edge-extension.tgz && tar zxfv sas-edge-extension.tgz && rm sas-edge-extension.tgz
+      wget $SAS_MIRROREXTENSIONS_URL -O sas-edge-extension.tgz && tar zxfv sas-edge-extension.tgz && rm sas-edge-extension.tgz
    fi
    # Download SAS Event Stream Processing on Edge
    echo "NOTE: Downloading SAS Event Stream Processing on Edge files."
-   bash edge_mirror.sh $sas_software_repository /
+   bash edge_mirror.sh $SAS_SOFTWAREREPOSITORY /
 else
    echo "NOTE: SAS Event Stream Processing on Egde repository exists. Skipping Download"
 fi
 
 # Check OpenCV files
 echo "NOTE: Verifying OpenCV files"
-if ! ls  OpenCV-x64-gpu/opencv-centos7-x64-rpm/* 1> /dev/null 2>&1; then
+if ! ls  $OPENCV_PACKAGELOCATON/* 1> /dev/null 2>&1; then
    echo "NOTE: Could not find OpenCV files. Getting submodules."
    git submodule init
    git submodule update --recursive --remote
@@ -143,22 +169,24 @@ else
 fi
 
 # Building Docker container
-if [ $container_build="YES" ]; then
-   echo "NOTE: Building Docker container $container_name:$container_tag"
-   docker build -t $container_name:$container_tag .
+if [ $CONTAINER_BUILD == "YES" ]; then
+   echo "NOTE: Building Docker container $CONTAINER_NAME:$CONTAINER_TAG"
+   docker build -t $CONTAINER_NAME:$CONTAINER_TAG \
+                --build-arg OPENCV_PACKAGELOCATION=$OPENCV_PACKAGELOCATION \
+                --build-arg SASESP_PACKAGELOCATION=$SASESP_PACKAGELOCATION \
+                --build-arg SAS_DEPLOYMENTDATA=$SAS_DEPLOYMENTDATA \
+                --build-arg PYTHON_REQ=$PYTHON_REQ .
 else
    echo "NOTE: Skipping docker build."
 fi
 
 # Pushing Docker container
-if [ $container_push="YES" ]; then
-   echo "NOTE: Pushing Docker container $container_name:$container_tag to repository."
-   docker push $container_name:$container_tag
+if [ $CONTAINER_PUSH == "YES" ]; then
+   echo "NOTE: Pushing Docker container $CONTAINER_NAME:$CONTAINER_TAG to repository."
+   docker push $CONTAINER_NAME:$CONTAINER_TAG
 else
    echo "NOTE: Skipping docker push."
 fi
 
 echo "Finished."
 exit
-
-
