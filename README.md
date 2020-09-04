@@ -52,9 +52,9 @@ bash buildContainer.sh --sas_deployment_data=mydeploymentdata.zip
 | sas_software_repository | Name of the SAS software repository | sas-espedge-125-aarch64_ubuntu_linux_16-apt |
 | sas_package_location | Name of the SAS software repository | espedge_repos/sas-espedge-106-x64_redhat_linux_6-yum |
 | python_req | Requirements file for Python | requirements.txt |
-| opencv_package_location | Location of OpenCV package | OpenCV-x64-gpu/opencv-centos7-x64-rpm |
+| opencv_package_location | Location of OpenCV RPM packages | OpenCV-x64-gpu/opencv-centos7-x64-rpm |
 | container_name | Docker container name | esp_gpu |
-| container_tag | Docker container tag | 6_2n |
+| container_tag | Docker container tag | 6_2 |
 | container_build | Build container | YES |
 | container_push | Push container to repository | NO |
 
