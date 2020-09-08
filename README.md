@@ -78,7 +78,7 @@ In many cases you want to extend your run call with additional variables to conf
 | JUPYTERLAB_PORT | JupyterLab port | 8080 |
 | JUPYTERLAB_NBDIR | JupyterLab notebook directory | /data/notebooks/ |
 
-Example: `docker run -it --net=host -e ESP_PORT 12345 --gpus all esp_gpu:6_2` will run the ESP server on port 12345.
+Example: `docker run -it --net=host -e ESP_PORT=12345 --gpus all esp_gpu:6_2` will run the ESP server on port 12345.
 
 You should see something like this:<br>
 ![cv](images/running_container.png "cv")

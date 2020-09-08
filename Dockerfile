@@ -20,7 +20,8 @@ ARG PYTHON_REQ
 
 # Copy SAS Event Stream Processing, OpenCV and Python environment files
 RUN mkdir -p /opt/opencv/ && \
-    mkdir -p /opt/sas_installfiles/
+    mkdir -p /opt/sas_installfiles/ && \
+    mkdir -p /data/notebooks/
 COPY ${SAS_PACKAGELOCATION} /opt/sas_installfiles
 ADD ${SAS_DEPLOYMENTDATA} /opt/sas_installfiles
 COPY ${OPENCV_PACKAGELOCATION} /opt/opencv
