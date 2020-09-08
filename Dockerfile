@@ -1,5 +1,5 @@
 # Change to your locations or use --build-arg
-ARG SASESP_PACKAGELOCATION=espedge_repos/sas-espedge-106-x64_redhat_linux_6-yum
+ARG SAS_PACKAGELOCATION=espedge_repos/sas-espedge-106-x64_redhat_linux_6-yum
 ARG SAS_DEPLOYMENTDATA=SAS_Viya_deployment_data.zip
 ARG SASESP_PLUGINS=esp_addons/esp_plugins
 ARG SASESP_ADAPTER=esp_addons/additional_adapters
@@ -11,7 +11,7 @@ MAINTAINER Michael Gorkow <michael.gorkow@sas.com>
 ENV DEBIAN_FRONTEND=noninteractive
 
 # Arguments
-ARG SASESP_PACKAGELOCATION
+ARG SAS_PACKAGELOCATION
 ARG SAS_DEPLOYMENTDATA
 ARG SASESP_PLUGINS
 ARG SASESP_ADAPTER
@@ -21,7 +21,7 @@ ARG PYTHON_REQ
 # Copy SAS Event Stream Processing, OpenCV and Python environment files
 RUN mkdir -p /opt/opencv/ && \
     mkdir -p /opt/sas_installfiles/
-COPY ${SASESP_PACKAGELOCATION} /opt/sas_installfiles
+COPY ${SAS_PACKAGELOCATION} /opt/sas_installfiles
 ADD ${SAS_DEPLOYMENTDATA} /opt/sas_installfiles
 COPY ${OPENCV_PACKAGELOCATION} /opt/opencv
 ADD ${PYTHON_REQ} /opt

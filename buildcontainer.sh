@@ -4,8 +4,10 @@ SAS_MIRRORMANAGER_URL="https://support.sas.com/installation/viya/35/sas-mirror-m
 SAS_MIRROREXTENSIONS_URL="https://support.sas.com/installation/viya/35/sas-edge-extension/sas-edge-extension.tgz"
 SAS_SOFTWAREREPOSITORY="sas-espedge-106-x64_redhat_linux_6-yum"
 SAS_PACKAGELOCATION="espedge_repos/sas-espedge-106-x64_redhat_linux_6-yum"
+SASESP_PLUGINS="esp_addons/esp_plugins"
+SASESP_ADAPTERS="esp_addons/additional_adapters"
 PYTHON_REQ="requirements.txt"
-OPENCV_PACKAGELOCATON="OpenCV-x64-gpu/opencv-centos7-x64-rpm"
+OPENCV_PACKAGELOCATION="OpenCV-x64-gpu/opencv-centos7-x64-rpm"
 CONTAINER_NAME="esp_gpu"
 CONTAINER_TAG="6_2"
 CONTAINER_BUILD="YES"
@@ -36,12 +38,20 @@ do
         SAS_PACKAGELOCATION="${arg#*=}"
         shift
         ;;
+        -spll*|--sas_plugins_location*)
+        SASESP_PLUGINS="${arg#*=}"
+        shift
+        ;;
+        -sadl*|--sas_adapters_location*)
+        SASESP_ADAPTERS="${arg#*=}"
+        shift
+        ;;
         -pr*|--python_req*)
         PYTHON_REQ="${arg#*=}"
         shift
         ;;
         -opl*|--opencv_package_location*)
-        OPENCV_PACKAGELOCATON="${arg#*=}"
+        OPENCV_PACKAGELOCATION="${arg#*=}"
         shift
         ;;
         -cn*|--container_name*)
@@ -92,11 +102,17 @@ printf '##### %-88s #####\n'
 printf '##### %-88s #####\n' "SAS Package Location:"
 printf '##### %-88s #####\n' "$SAS_PACKAGELOCATION"
 printf '##### %-88s #####\n'
+printf '##### %-88s #####\n' "SAS Plugins Location:"
+printf '##### %-88s #####\n' "$SASESP_PLUGINS"
+printf '##### %-88s #####\n'
+printf '##### %-88s #####\n' "SAS Adapters Location:"
+printf '##### %-88s #####\n' "$SASESP_ADAPTERS"
+printf '##### %-88s #####\n'
 printf '##### %-88s #####\n' "Python Requirements File:"
 printf '##### %-88s #####\n' "$PYTHON_REQ"
 printf '##### %-88s #####\n'
 printf '##### %-88s #####\n' "OpenCV Package Location:"
-printf '##### %-88s #####\n' "$OPENCV_PACKAGELOCATON"
+printf '##### %-88s #####\n' "$OPENCV_PACKAGELOCATION"
 printf '##### %-88s #####\n'
 printf '##### %-88s #####\n' "Docker Container Name:"
 printf '##### %-88s #####\n' "$CONTAINER_NAME"
@@ -160,7 +176,7 @@ fi
 
 # Check OpenCV files
 echo "NOTE: Verifying OpenCV files"
-if ! ls  $OPENCV_PACKAGELOCATON/* 1> /dev/null 2>&1; then
+if ! ls  $OPENCV_PACKAGELOCATION/* 1> /dev/null 2>&1; then
    echo "NOTE: Could not find OpenCV files. Getting submodules."
    git submodule init
    git submodule update --recursive --remote
@@ -172,10 +188,12 @@ fi
 if [ $CONTAINER_BUILD == "YES" ]; then
    echo "NOTE: Building Docker container $CONTAINER_NAME:$CONTAINER_TAG"
    docker build -t $CONTAINER_NAME:$CONTAINER_TAG \
-                --build-arg OPENCV_PACKAGELOCATION=$OPENCV_PACKAGELOCATION \
-                --build-arg SASESP_PACKAGELOCATION=$SASESP_PACKAGELOCATION \
-                --build-arg SAS_DEPLOYMENTDATA=$SAS_DEPLOYMENTDATA \
-                --build-arg PYTHON_REQ=$PYTHON_REQ .
+                --build-arg SAS_PACKAGELOCATION=${SAS_PACKAGELOCATION} \
+                --build-arg SAS_DEPLOYMENTDATA=${SAS_DEPLOYMENTDATA} \
+                --build-arg SASESP_PLUGINS=${SASESP_PLUGINS} \
+                --build-arg SASESP_ADAPTERS=${SASESP_ADAPTERS} \
+                --build-arg OPENCV_PACKAGELOCATION=${OPENCV_PACKAGELOCATION} \
+                --build-arg PYTHON_REQ=${PYTHON_REQ} .
 else
    echo "NOTE: Skipping docker build."
 fi
