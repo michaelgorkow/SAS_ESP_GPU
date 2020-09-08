@@ -50,8 +50,10 @@ bash buildContainer.sh --sas_deployment_data=mydeploymentdata.zip
 | sas_mirrormanager_url | URL for SAS Mirror Manager | https://support.sas.com/installation/viya/35/sas-mirror-manager/lax/mirrormgr-linux.tgz |
 | sas_mirrorextensions_url | URL for SAS Mirror Manager Extension | https://support.sas.com/installation/viya/35/sas-edge-extension/sas-edge-extension.tgz |
 | sas_software_repository | Name of the SAS software repository | sas-espedge-125-aarch64_ubuntu_linux_16-apt |
-| sas_package_location | Name of the SAS software repository | espedge_repos/sas-espedge-106-x64_redhat_linux_6-yum |
-| python_req | Requirements file for Python | requirements.txt |
+| sas_package_location | Location of SAS packages | espedge_repos/sas-espedge-106-x64_redhat_linux_6-yum |
+| sas_plugins_location | Location of ESP Plugins | esp_addons/esp_plugins |
+| sas_adapters_location | Location of ESP Adapters | esp_addons/additional_adapters |
+| python_req | Location of requirements file for Python | requirements.txt |
 | opencv_package_location | Location of OpenCV RPM packages | OpenCV-x64-gpu/opencv-centos7-x64-rpm |
 | container_name | Docker container name | esp_gpu |
 | container_tag | Docker container tag | 6_2 |
@@ -61,7 +63,7 @@ bash buildContainer.sh --sas_deployment_data=mydeploymentdata.zip
 ### Run Container
 Simply use docker run and attach your gpus:
 ```
-docker run -it --net=host --gpus all esp:gpu
+docker run -it --net=host --gpus all esp_gpu:6_2
 ```
 In many cases you want to extend your run call with additional variables to configure the container.
 
@@ -76,7 +78,7 @@ In many cases you want to extend your run call with additional variables to conf
 | JUPYTERLAB_PORT | JupyterLab port | 8080 |
 | JUPYTERLAB_NBDIR | JupyterLab notebook directory | /data/notebooks/ |
 
-Example: `docker run -it --net=host -e ESP_PORT 12345 --gpus all esp:gpu` will run the ESP server on port 12345.
+Example: `docker run -it --net=host -e ESP_PORT 12345 --gpus all esp_gpu:6_2` will run the ESP server on port 12345.
 
 You should see something like this:<br>
 ![cv](images/running_container.png "cv")
@@ -111,11 +113,11 @@ When building your own container, you can adjust this file as you like to ex/inc
 If you want to share ressources with your container, e.g. a webcam, you can do so by adapting your docker run command.<br>
 To share devices, e.g. your webcam, use:
 ```
-docker run --device=/dev/video0:/dev/video0 --net=host esp:gpu
+docker run --device=/dev/video0:/dev/video0 --net=host esp_gpu:6_2
 ```
 To share a folder, e.g. with additional data like models, projects, etc. use:
 ```
-docker run -v folder-on-host:folder-on-container --net=host esp:gpu
+docker run -v folder-on-host:folder-on-container --net=host esp_gpu:6_2
 ```
 
 Example: For my needs I usually start my container with the following command to share my local notebooks, my webcam, host networking interface and to allow GUI applications (e.g. Opencv).<br>
@@ -125,7 +127,7 @@ docker run -it --privileged=true --net=host --ipc=host \
            --device=/dev/video0:/dev/video0 \
            --gpus all -e DISPLAY=$DISPLAY \
            -v /tmp/.X11-unix:/tmp/.X11-unix -v /var/run/dbus:/var/run/dbus \
-           esp:gpu
+           esp_gpu:6_2
 ```
 
 ### Run GUI applications inside your Docker container
